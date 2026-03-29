@@ -1,0 +1,78 @@
+{
+  "summary": "Completed e2e testing of new admin panel features: Content Editor with Live Preview toggle and UI Management with Display Mode selector, Image Gallery, and active selection. All features working correctly.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "UIManagementPage.jsx",
+        "issues": ["ESLint warning: useEffect has missing dependency 'fetchImages' - minor code quality issue"]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_settings_api.py",
+    "/app/test_reports/pytest/pytest_results.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "UIManagementPage.jsx line 234: useEffect has missing dependency 'fetchImages' - consider adding to dependency array or using useCallback"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_settings_api.py"
+  ],
+  "success_rate": {
+    "backend": "100% (19/19 tests passed)",
+    "frontend": "100%"
+  },
+  "test_credentials": {
+    "admin_email": "admin@suitsindia.com",
+    "admin_password": "admin123"
+  },
+  "seed_data_creation": "None - using existing admin user and default images",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "All new admin panel features tested and working: 1) Content Editor at /admin/content has Live Preview toggle that shows/hides iframe with actual page preview, 2) UI Management at /admin/ui has Display Mode selector (Individual vs Carousel), Image Gallery with click-to-select functionality, Active/In Carousel badges, Add Image button, and Save All Changes. Backend APIs for /api/settings/all-images and /api/settings/all-content working correctly with authentication.",
+  "features_tested": {
+    "admin_login": {
+      "status": "PASS",
+      "details": "Login with admin@suitsindia.com / admin123 works correctly"
+    },
+    "content_editor_live_preview": {
+      "status": "PASS",
+      "details": "Live Preview toggle switch found and working - shows/hides iframe with actual page preview. Toggle is ON by default."
+    },
+    "content_editor_form_editing": {
+      "status": "PASS",
+      "details": "Form-based editing with 28 input fields for content editing across 9 page tabs (Home, About, Garments, Fabrics, Technology, How It Works, Get Started, Trunk Show, Contact Us)"
+    },
+    "ui_management_display_mode": {
+      "status": "PASS",
+      "details": "Display Mode selector with Individual Image and Carousel options. Clicking switches mode and shows appropriate badges."
+    },
+    "ui_management_image_gallery": {
+      "status": "PASS",
+      "details": "Image Gallery with 3 hero images. Click-to-select functionality works - clicking image in Individual mode sets it as active, in Carousel mode adds/removes from carousel."
+    },
+    "ui_management_active_badges": {
+      "status": "PASS",
+      "details": "Active badge shown on selected image in Individual mode. 'In Carousel' badges shown on selected images in Carousel mode."
+    },
+    "ui_management_add_image": {
+      "status": "PASS",
+      "details": "Add Image button and URL input field present for adding new hero images"
+    },
+    "save_functionality": {
+      "status": "PASS",
+      "details": "Save All Changes button present on both Content Editor and UI Management pages. API endpoints /api/settings/all-content and /api/settings/all-images working correctly."
+    },
+    "api_all_images": {
+      "status": "PASS",
+      "details": "GET /api/settings/all-images requires auth, returns page configurations with displayMode, hero images, activeHeroIndex, carouselImages. PUT endpoint also working."
+    }
+  }
+}

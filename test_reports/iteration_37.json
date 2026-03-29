@@ -1,0 +1,59 @@
+{
+  "summary": "Tested Style Options input_type system. Backend: 10/10 tests PASSED - input_type, has_text_input, text_label fields all work correctly for parameters, options, and sub-options. Frontend Admin Style Management: All features verified - Input Type dropdown (Image Only/Text Only/Image + Text), Txt toggle on options, Sub toggle for sub-options, text label configuration, and Save Changes functionality all working.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "CSP Headers",
+        "issues": ["PostHog and Cloudflare Insights scripts blocked - not critical, affects analytics only"]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_style_input_types.py",
+    "/app/test_reports/pytest/pytest_style_input_types.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "styling.py lines 17-25: SubStyleOption model correctly includes has_text_input and text_label fields",
+    "styling.py lines 27-36: StyleOption model correctly includes has_sub_options, sub_options, has_text_input, and text_label fields",
+    "styling.py lines 39-46: StyleParameter model correctly includes input_type (default 'image_only') and text_label fields",
+    "StyleManagementPage.jsx lines 561-580: Input Type Select dropdown working with Image Only, Text Only, Image + Text options",
+    "StyleManagementPage.jsx lines 707-717: Txt toggle with has_text_input working on options",
+    "StyleManagementPage.jsx lines 815-821: Sub-option Txt toggle working correctly",
+    "StylingPage.jsx lines 1001-1011: text_only input_type renders text input instead of image cards",
+    "StylingPage.jsx lines 1063-1082: Per-option text input renders when option.has_text_input is true",
+    "StylingPage.jsx lines 1085-1098: Parameter-level text input renders for image_and_text input_type",
+    "StylingPage.jsx lines 1143-1162: Sub-option text input renders when sub.has_text_input is true"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_style_input_types.py"
+  ],
+  "success_rate": {
+    "backend": "100% (10/10 tests passed)",
+    "frontend": "100% - All features verified via Playwright"
+  },
+  "test_credentials": {
+    "admin": {"email": "admin@suitsindia.com", "password": "admin", "endpoint": "/api/auth/admin/login"}
+  },
+  "seed_data_creation": "None - used existing 'suits' product styling data",
+  "retest_needed": false,
+  "should_main_agent_self_test": true,
+  "context_for_next_testing_agent": "Style Options input_type system fully tested: 1) StyleParameter supports input_type field with values 'image_only', 'text_only', 'image_and_text' (default: image_only). 2) StyleOption supports has_text_input and text_label fields. 3) SubStyleOption supports has_text_input and text_label fields. 4) Admin StyleManagementPage shows Input Type dropdown on each parameter header. 5) When 'Text Only' selected, options grid hidden and text field configuration shown. 6) When 'Image + Text' selected, both options and text field shown. 7) Each option has 'Txt' toggle to enable per-option text input with text_label. 8) Sub-options also have 'Txt' toggle for text input. 9) Save Changes persists all fields correctly. 10) Existing 'Specific Style - Write' option in Lapel has has_text_input=true preserved.",
+  "features_tested": {
+    "admin_input_type_dropdown_visible": "PASS - Input Type dropdown visible on each parameter header",
+    "admin_text_only_hides_options": "PASS - Selecting 'Text Only' hides options grid, shows text field configuration",
+    "admin_image_and_text_shows_both": "PASS - Selecting 'Image + Text' shows both options and text field",
+    "admin_txt_toggle_on_options": "PASS - Each option has 'Txt' toggle visible",
+    "admin_txt_toggle_shows_text_label": "PASS - When 'Txt' toggle on, text label input appears below option",
+    "admin_sub_options_txt_toggle": "PASS - Sub-options have 'Txt' toggle for text input",
+    "admin_save_persists_fields": "PASS - Save Changes persists input_type, text_label, has_text_input",
+    "backend_get_returns_input_type": "PASS - GET /api/styling/parameters/{product_id} returns input_type field",
+    "backend_put_saves_has_text_input": "PASS - PUT saves has_text_input, text_label on options/sub-options"
+  }
+}

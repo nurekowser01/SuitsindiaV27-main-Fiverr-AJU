@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8001:8001"
+    environment:
+      - MONGO_URL=mongodb+srv://nurekowser01freelancer_db_user:tlL8mfuSufTZlIh2@nurekowser-rifat.sysdo8u.mongodb.net/suits_india?retryWrites=true&w=majority&appName=nurekowser-rifat
+      - DB_NAME=suits_india
+      - JWT_SECRET=super-secret-jwt-key-change-in-production-64-chars-long
+      - ENVIRONMENT=development
+      - DEBUG=true
+    volumes:
+      - ./backend:/app
+    command: uvicorn server:app --host 0.0.0.0 --port 8001 --reload
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - REACT_APP_BACKEND_URL=http://backend:8001
+      - REACT_APP_ENVIRONMENT=development
+      - BACKEND_HOST=backend  
+
+    volumes:
+      - ./frontend/src:/app/src
+      - /app/node_modules
+    depends_on:
+      - backend

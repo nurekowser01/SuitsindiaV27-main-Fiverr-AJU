@@ -1,0 +1,76 @@
+{
+  "summary": "Authentication role-collision bug fix VERIFIED - All 4 test cases passed. Reseller and Sales Partner sessions now correctly isolated with separate token storage (reseller_token vs partner_token) and proper role validation on login.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/test_reports/iteration_25.json"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "The fix properly uses separate localStorage keys: reseller_token for resellers, partner_token for sales partners",
+    "Role validation in AuthContext.jsx (lines 104-132 for resellerLogin, lines 136-164 for partnerLogin) correctly prevents cross-portal login"
+  ],
+  "updated_files": [],
+  "success_rate": {
+    "backend": "N/A - frontend only testing",
+    "frontend": "100% (4/4 test cases passed)"
+  },
+  "test_credentials": {
+    "reseller": {"email": "trump@suitsindia.com", "password": "trump123"},
+    "sales_partner": {"email": "donald@suitsindia.com", "password": "donald123"}
+  },
+  "seed_data_creation": "None - used existing test accounts",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Authentication role-collision bug has been FIXED and VERIFIED. All 4 test cases passed: (1) Reseller login + refresh session persistence, (2) Sales Partner login + refresh session persistence, (3) Cross-portal rejection - Sales Partner on Reseller portal shows error, (4) Cross-portal rejection - Reseller on Sales Partner portal shows error. Token storage properly isolated: reseller_token vs partner_token.",
+  "features_tested": {
+    "test_case_1_reseller_login": {
+      "description": "Login as reseller (trump@suitsindia.com), refresh page, verify session persists in Reseller portal",
+      "result": "PASS",
+      "details": {
+        "login": "SUCCESS - navigated to /reseller/dashboard",
+        "token_storage": "SUCCESS - reseller_token SET, partner_token NOT SET",
+        "refresh_persistence": "SUCCESS - remained in /reseller/dashboard after refresh"
+      }
+    },
+    "test_case_2_sales_partner_login": {
+      "description": "Login as sales partner (donald@suitsindia.com), refresh page, verify session persists in Sales Partner portal",
+      "result": "PASS",
+      "details": {
+        "login": "SUCCESS - navigated to /partner/dashboard",
+        "token_storage": "SUCCESS - partner_token SET, reseller_token NOT SET",
+        "refresh_persistence": "SUCCESS - remained in /partner/dashboard after refresh"
+      }
+    },
+    "test_case_3_cross_portal_rejection_sp_on_reseller": {
+      "description": "Attempt to login as Sales Partner (donald@suitsindia.com) on Reseller login page - should fail",
+      "result": "PASS",
+      "details": {
+        "login_rejected": "SUCCESS - user NOT redirected to dashboard",
+        "error_message": "SUCCESS - 'Please use the Sales Partner portal to login'",
+        "no_token_set": "SUCCESS - no tokens were stored"
+      }
+    },
+    "test_case_4_cross_portal_rejection_reseller_on_sp": {
+      "description": "Attempt to login as Reseller (trump@suitsindia.com) on Sales Partner login page - should fail",
+      "result": "PASS",
+      "details": {
+        "login_rejected": "SUCCESS - user NOT redirected to dashboard",
+        "error_message": "SUCCESS - 'Please use the Reseller portal to login'",
+        "no_token_set": "SUCCESS - no tokens were stored"
+      }
+    }
+  },
+  "bug_fix_verification": {
+    "original_issue": "Authentication role-collision bug where Reseller and Sales Partner sessions were conflicting, causing users to be redirected to wrong portals after page refresh",
+    "fix_applied": "Frontend updated to use separate token storage (reseller_token vs partner_token) and separate login functions (resellerLogin vs partnerLogin) with role validation",
+    "verification_status": "FULLY VERIFIED - All 4 test cases passed"
+  }
+}

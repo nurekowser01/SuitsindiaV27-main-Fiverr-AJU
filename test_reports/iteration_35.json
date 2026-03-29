@@ -1,0 +1,66 @@
+{
+  "summary": "Pricing Margin Fix Verified - All 13 backend tests PASSED. Admin margins (10% CMT, 10% fabric, 5% styling) are correctly applied per-reseller by looking up reseller_settings by 'reseller_id' (email). Reseller margins (150%) are applied on top. Customer Price = Base × (1 + Admin Margin%) × (1 + Reseller Margin%). Frontend login and settings pages work correctly.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": [
+      {
+        "screen": "CSP Headers",
+        "issues": ["PostHog and Cloudflare Insights scripts blocked by CSP - not critical, affects analytics only"]
+      }
+    ]
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_pricing_margins_fix.py",
+    "/app/test_reports/pytest/pytest_pricing_margins_fix.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "pricing.py line 576: Correctly looks up reseller_settings by reseller_id matching email",
+    "pricing.py lines 581-584: Reseller margins extracted from settings_margins dict correctly",
+    "pricing.py lines 695-698: Customer price calculation applies reseller margin on top of reseller cost",
+    "ResellerSettingsPage.jsx line 40: Uses user.email as resellerId instead of hardcoded 'default'",
+    "StylingPage.jsx line 73: Uses user.email as resellerId for price calculation"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_pricing_margins_fix.py"
+  ],
+  "success_rate": {
+    "backend": "100% (13/13 tests passed)",
+    "frontend": "100% (login, settings, pricing all verified)"
+  },
+  "test_credentials": {
+    "admin": {"email": "admin@suitsindia.com", "password": "admin", "endpoint": "/api/auth/admin/login"},
+    "reseller": {"email": "reseller@test.com", "password": "reseller123", "endpoint": "/api/auth/reseller/login"}
+  },
+  "seed_data_creation": "None required - existing test data used",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Pricing margin fix verified. Key change: pricing.py now looks up reseller_settings by 'reseller_id' (which stores the reseller's email) instead of 'reseller_email'. Frontend pages use user.email as resellerId. Admin margins are in reseller_pricing collection, reseller margins are in reseller_settings collection.",
+  "features_tested": {
+    "admin_login": "PASS - admin@suitsindia.com / admin works via /api/auth/admin/login",
+    "reseller_login": "PASS - reseller@test.com / reseller123 works via /api/auth/reseller/login",
+    "reseller_settings_per_email": "PASS - GET /api/reseller-settings/{email} creates/returns per-reseller settings",
+    "reseller_margins_update": "PASS - PATCH /api/reseller-settings/{email}/margins updates correctly",
+    "admin_pricing_lookup": "PASS - GET /api/pricing/reseller-pricing/{email} returns admin margins",
+    "admin_pricing_update": "PASS - PUT /api/pricing/reseller-pricing/{email} saves admin margins",
+    "price_calculation_admin_margin": "PASS - Admin margin (5% styling) applied: 100 × 1.05 = 105",
+    "price_calculation_reseller_margin": "PASS - Reseller margin (150%) applied: 105 × 2.5 = 262.5",
+    "price_calculation_breakdown": "PASS - Breakdown shows admin_margin_percent and reseller_margin_percent",
+    "price_calculation_totals": "PASS - total_reseller_cost=368.5, total (customer_price)=831.25",
+    "frontend_settings_page": "PASS - Shows margin inputs with values 150%",
+    "frontend_pricing_display": "PASS - Example calculation shows margin applied"
+  },
+  "pricing_verification": {
+    "test_case": "Styling total = 100, Admin margin = 5%, Reseller margin = 150%",
+    "expected_reseller_cost": "100 × 1.05 = 105",
+    "expected_customer_price": "105 × 2.5 = 262.5",
+    "actual_reseller_cost": 105,
+    "actual_customer_price": 262.5,
+    "status": "VERIFIED CORRECT"
+  }
+}

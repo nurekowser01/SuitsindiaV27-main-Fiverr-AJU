@@ -1,0 +1,84 @@
+{
+  "summary": "POS Pricing Feature - Cost View Secret Code Testing Complete. All features verified working. Backend (12/12 tests passed). Frontend UI testing successful - Secret code configuration in Settings, lock button functionality, cost view toggle, and wrong code handling all working correctly.",
+  "backend_issues": {
+    "critical": [],
+    "minor": []
+  },
+  "frontend_issues": {
+    "ui_bugs": [],
+    "integration_issues": [],
+    "design_issues": []
+  },
+  "test_report_links": [
+    "/app/backend/tests/test_cost_view_secret_code.py",
+    "/app/test_reports/pytest/pytest_cost_view_secret_code.xml"
+  ],
+  "action_items": [],
+  "critical_code_review_comments": [
+    "All data-testid attributes properly implemented: secret-code-input, cost-view-toggle, secret-code-verify-input, verify-secret-code-btn",
+    "Pricing calculation correctly applies margins only for customer view and shows base cost in cost view",
+    "Backend API verify-cost-code returns proper HTTP codes (200 success, 401 wrong code, 400 not configured)"
+  ],
+  "updated_files": [
+    "/app/backend/tests/test_cost_view_secret_code.py"
+  ],
+  "success_rate": {
+    "backend": "100% (12/12 tests passed)",
+    "frontend": "100% - All features verified working"
+  },
+  "test_credentials": {
+    "reseller": {"email": "trump@suitsindia.com", "password": "trump123", "status": "WORKING"}
+  },
+  "seed_data_creation": "Secret code '1234' set for 'default' reseller via API",
+  "retest_needed": false,
+  "should_main_agent_self_test": false,
+  "context_for_next_testing_agent": "Cost View Secret Code feature fully implemented and tested. Secret code can be configured in Settings > Margins tab. Styling page shows 'Customer Price' by default with margins applied. Lock icon toggles to 'Your Cost' view after entering correct code.",
+  "features_tested": {
+    "settings_secret_code_section": {
+      "status": "PASS",
+      "details": "Cost View Secret Code section visible in Margins tab with password input, description, and help text"
+    },
+    "secret_code_save": {
+      "status": "PASS",
+      "details": "Secret code saved via API and persisted correctly"
+    },
+    "default_customer_price_view": {
+      "status": "PASS",
+      "details": "Styling page shows 'Customer Price' header by default with margins applied (CMT: ₹315 vs Cost: ₹185)"
+    },
+    "lock_icon_present": {
+      "status": "PASS",
+      "details": "Lock icon button visible next to pricing header with data-testid='cost-view-toggle'"
+    },
+    "secret_code_modal": {
+      "status": "PASS",
+      "details": "Clicking lock opens modal with title 'Enter Secret Code', password input, Cancel and Unlock buttons"
+    },
+    "correct_code_unlocks_cost_view": {
+      "status": "PASS",
+      "details": "Entering '1234' unlocks cost view - header changes to 'Your Cost', shows 'Viewing your cost price' indicator, lower prices displayed"
+    },
+    "wrong_code_shows_error": {
+      "status": "PASS",
+      "details": "Entering wrong code shows 'Invalid secret code' error toast, modal stays open for retry"
+    },
+    "cost_view_prices_lower": {
+      "status": "PASS",
+      "details": "Cost view shows prices without margins: CMT ₹185, Total ₹334 vs Customer: CMT ₹315, Total ₹464"
+    },
+    "toggle_back_to_customer_view": {
+      "status": "PASS",
+      "details": "Clicking unlocked lock icon switches back to customer pricing"
+    },
+    "backend_verify_endpoint": {
+      "status": "PASS",
+      "details": "POST /reseller-settings/{id}/verify-cost-code works correctly - returns 200 on correct code, 401 on wrong code, 400 if not configured"
+    }
+  },
+  "api_verification": {
+    "GET /api/reseller-settings/{id}": "PASS - Returns settings with cost_view_secret_code field",
+    "PUT /api/reseller-settings/{id}": "PASS - Saves settings including secret code",
+    "PATCH /api/reseller-settings/{id}/secret-code": "PASS - Updates secret code only",
+    "POST /api/reseller-settings/{id}/verify-cost-code": "PASS - Verifies code and returns appropriate response"
+  }
+}
