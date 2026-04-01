@@ -6,19 +6,19 @@ WORKDIR /app
 COPY package*.json ./
 
 # Install dependencies
-
-RUN rm -rf node_modules package-lock.json
 RUN npm install --legacy-peer-deps --force
 
 # Copy source code
 COPY . .
 
+# Build the app
 RUN npm run build
 
-ENV BACKEND_HOST=backend 
+# Install serve to host the static files
+RUN npm install -g serve
 
 # Expose port
 EXPOSE 3000
 
-# Run application
-CMD ["npm", "run", "start"]
+# Run serve with the build folder
+CMD ["serve", "-s", "build", "-l", "3000"]
