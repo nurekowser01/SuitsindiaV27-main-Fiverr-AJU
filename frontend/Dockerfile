@@ -2,6 +2,10 @@ FROM node:20.20.1-slim
 
 WORKDIR /app
 
+# Accept build arguments
+ARG REACT_APP_BACKEND_URL
+ENV REACT_APP_BACKEND_URL=$REACT_APP_BACKEND_URL
+
 # Update npm and clean cache
 RUN npm install -g npm@latest && \
     npm cache clean --force
@@ -18,7 +22,7 @@ RUN npm config set registry https://registry.npmjs.org/ && \
 # Copy source code
 COPY . .
 
-# Build the app
+# Build the app (now with the backend URL embedded)
 RUN npm run build
 
 # Install serve
