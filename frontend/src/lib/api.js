@@ -13,8 +13,10 @@
  */
 
 import axios from 'axios';
+import { backendUrl } from '../config';
 
-const API_URL = process.env.REACT_APP_BACKEND_URL + '/api';
+const API_URL = backendUrl + '/api';
+console.log('API URL:', API_URL); // Debug
 
 // Create axios instance with base URL
 const api = axios.create({
