@@ -2,6 +2,11 @@ FROM python:3.11.14-slim
 
 WORKDIR /app
 
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONPATH=/app
+
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
     gcc \
@@ -23,4 +28,4 @@ USER appuser
 EXPOSE 8001
 
 # Run application
-CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8001", "--reload"]
+CMD ["uvicorn", "server:app", "--host", "0.0.0.0", "--port", "8001"]
